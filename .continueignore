@@ -1,0 +1,46 @@
+# Dependencias
+node_modules/
+
+# Expo / Build / Cache
+.expo/
+dist/
+build/
+web-build/
+.expo-shared/
+
+# Git / IDE
+.git/
+.vscode/
+.idea/
+
+# Config que no aporta lógica
+package-lock.json
+README.md
+
+# Archivos generados
+*.log
+*.tmp
+*.cache
+
+# Tipos generados por expo
+expo-env.d.ts
+
+# Binarios / assets pesados
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.zip
+*.rar
+*.db
+*.sqlite
+assets/
+
+# Mapas y bundles
+*.map
+*.bundle
+
+# OS
+.DS_Store
+Thumbs.db
