@@ -19,12 +19,17 @@ export const CREATE_TRANSACTIONS_TABLE = `
 
 // Función para inicializar la base de datos
 export async function initializeDatabase(): Promise<SQLite.SQLiteDatabase> {
-  const db = await SQLite.openDatabaseAsync(DATABASE_NAME);
-  
-  // Crear la tabla si no existe
-  await db.execAsync(CREATE_TRANSACTIONS_TABLE);
-  
-  console.log('✅ Base de datos inicializada');
-  
-  return db;
+  try {
+    const db = await SQLite.openDatabaseAsync(DATABASE_NAME);
+    
+    // Usar runAsync en lugar de execAsync para evitar problemas con NullPointerException
+    await db.runAsync(CREATE_TRANSACTIONS_TABLE);
+    
+    console.log('✅ Base de datos inicializada correctamente');
+    
+    return db;
+  } catch (error) {
+    console.error('❌ Error inicializando base de datos:', error);
+    throw error;
+  }
 }

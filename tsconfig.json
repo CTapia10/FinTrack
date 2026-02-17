@@ -4,11 +4,15 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["app/*"],
-      "@domain/*": ["src/domain/*"],
-      "@infra/*": ["src/infrastructure/*"],
-      "@presentation/*": ["src/presentation/*"],
-      "@shared/*": ["src/shared/*"]
+      "@app/*": ["./app/*"],
+      "@domain": ["./src/domain"],
+      "@domain/*": ["./src/domain/*"],
+      "@infra": ["./src/infrastructure"],
+      "@infra/*": ["./src/infrastructure/*"],
+      "@presentation": ["./src/presentation"],
+      "@presentation/*": ["./src/presentation/*"],
+      "@shared": ["./src/shared"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": [
