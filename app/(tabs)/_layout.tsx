@@ -2,23 +2,28 @@
 
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useColorScheme, Text } from 'react-native';
-
-function MyComponent() {
-  const colorScheme = useColorScheme();
-  return <Text>{colorScheme === 'dark' ? 'Dark Mode' : 'Light Mode'}</Text>;
-}   
+import { useAppTheme } from '@presentation/context/ThemeContext';
+import { ThemeToggleButton } from '@presentation/components/ThemeToggleButton';
 
 export default function TabLayout() {
+  const { theme } = useAppTheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#6200ee',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textTertiary,
         headerShown: true,
+        headerStyle: {
+          backgroundColor: theme.colors.surface,
+        },
+        headerTintColor: theme.colors.textPrimary,
+        headerTitleStyle: {
+          color: theme.colors.textPrimary,
+        },
+        headerRight: () => <ThemeToggleButton />,
       }}
     >
-      
       <Tabs.Screen
         name="dashboard"
         options={{

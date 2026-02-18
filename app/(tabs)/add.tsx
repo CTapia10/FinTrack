@@ -1,7 +1,7 @@
 // app/(tabs)/add.tsx
 
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { ScrollView, StyleSheet, Alert } from 'react-native';
 import {
   TextInput,
   Button,
@@ -15,10 +15,16 @@ import { SQLiteTransactionRepository } from '@infra/storage/SQLiteTransactionRep
 import { TransactionType } from '@domain';
 import { IncomeCategory, ExpenseCategory, Category } from '@domain/enums/Category';
 import { useRouter } from 'expo-router';
+import { useThemeColors } from '@shared/theme/useThemeColors';
+import { useAppTheme } from '@presentation/context/ThemeContext';
 
 export default function AddScreen() {
   // Router para navegación
   const router = useRouter();
+
+  // Temas y colores
+  const colors = useThemeColors();
+  const { theme } = useAppTheme();
 
   // Estado del formulario
   const [type, setType] = useState<TransactionType>(TransactionType.EXPENSE);
@@ -33,6 +39,9 @@ export default function AddScreen() {
 
   // Instancia del repositorio
   const repository = new SQLiteTransactionRepository();
+
+  // Estilos dinámicos basados en el tema
+  const dynamicStyles = useMemo(() => createStyles(colors, theme), [colors, theme]);
 
   // Obtener categorías según el tipo
   const categories =
@@ -105,11 +114,11 @@ export default function AddScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Card style={styles.card}>
+    <ScrollView style={dynamicStyles.container}>
+      <Card style={dynamicStyles.card}>
         <Card.Content>
           {/* Selector de tipo */}
-          <Text variant="titleMedium" style={styles.label}>
+          <Text style={[dynamicStyles.label, { fontWeight: 'bold' }]}>
             Tipo de transacción
           </Text>
           <SegmentedButtons
@@ -127,11 +136,11 @@ export default function AddScreen() {
                 icon: 'arrow-down',
               },
             ]}
-            style={styles.segmented}
+            style={dynamicStyles.segmented}
           />
 
           {/* Monto */}
-          <Text variant="titleMedium" style={styles.label}>
+          <Text style={[dynamicStyles.label, { fontWeight: 'bold' }]}>
             Monto
           </Text>
           <TextInput
@@ -142,11 +151,11 @@ export default function AddScreen() {
             keyboardType="numeric"
             left={<TextInput.Icon icon="currency-usd" />}
             placeholder="0.00"
-            style={styles.input}
+            style={dynamicStyles.input}
           />
 
           {/* Descripción */}
-          <Text variant="titleMedium" style={styles.label}>
+          <Text style={[dynamicStyles.label, { fontWeight: 'bold' }]}>
             Descripción
           </Text>
           <TextInput
@@ -156,11 +165,11 @@ export default function AddScreen() {
             onChangeText={setDescription}
             left={<TextInput.Icon icon="text" />}
             placeholder="Ej: Supermercado"
-            style={styles.input}
+            style={dynamicStyles.input}
           />
 
           {/* Categoría */}
-          <Text variant="titleMedium" style={styles.label}>
+          <Text style={[dynamicStyles.label, { fontWeight: 'bold' }]}>
             Categoría
           </Text>
           <Menu
@@ -171,8 +180,8 @@ export default function AddScreen() {
                 mode="outlined"
                 onPress={() => setMenuVisible(true)}
                 icon="chevron-down"
-                contentStyle={styles.categoryButton}
-                style={styles.input}
+                contentStyle={dynamicStyles.categoryButton}
+                style={dynamicStyles.input}
               >
                 {category || 'Selecciona una categoría'}
               </Button>
@@ -193,7 +202,7 @@ export default function AddScreen() {
           </Menu>
 
           {/* Fecha */}
-          <Text variant="titleMedium" style={styles.label}>
+          <Text style={[dynamicStyles.label, { fontWeight: 'bold' }]}>
             Fecha
           </Text>
           <TextInput
@@ -202,9 +211,9 @@ export default function AddScreen() {
             value={date.toLocaleDateString('es-AR')}
             editable={false}
             left={<TextInput.Icon icon="calendar" />}
-            style={styles.input}
+            style={dynamicStyles.input}
           />
-          <Text variant="bodySmall" style={styles.dateNote}>
+          <Text style={[dynamicStyles.dateNote]}>
             Por ahora usa la fecha actual. Selector de fecha próximamente.
           </Text>
 
@@ -214,7 +223,7 @@ export default function AddScreen() {
             onPress={handleSave}
             loading={loading}
             disabled={loading}
-            style={styles.saveButton}
+            style={dynamicStyles.saveButton}
             icon="check"
           >
             Guardar Transacción
@@ -225,34 +234,40 @@ export default function AddScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#353232',
-  },
-  card: {
-    margin: 16,
-  },
-  label: {
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  segmented: {
-    marginBottom: 8,
-  },
-  input: {
-    marginBottom: 8,
-  },
-  categoryButton: {
-    justifyContent: 'flex-start',
-  },
-  dateNote: {
-    opacity: 0.6,
-    fontStyle: 'italic',
-    marginBottom: 8,
-  },
-  saveButton: {
-    marginTop: 24,
-    paddingVertical: 6,
-  },
-});
+
+const createStyles = (colors: ReturnType<typeof useThemeColors>, theme: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    card: {
+      margin: 16,
+      backgroundColor: theme.colors.surface,
+    },
+    label: {
+      marginTop: 16,
+      marginBottom: 8,
+      color: colors.textPrimary,
+    },
+    segmented: {
+      marginBottom: 8,
+    },
+    input: {
+      marginBottom: 8,
+      backgroundColor: colors.background,
+    },
+    categoryButton: {
+      justifyContent: 'flex-start',
+    },
+    dateNote: {
+      opacity: 0.6,
+      fontStyle: 'italic',
+      marginBottom: 8,
+      color: colors.textSecondary,
+    },
+    saveButton: {
+      marginTop: 24,
+      paddingVertical: 6,
+    },
+  });
