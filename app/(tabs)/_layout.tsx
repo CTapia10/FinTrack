@@ -12,14 +12,14 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.textTertiary,
+        tabBarInactiveTintColor: theme.colors.tertiary,
         headerShown: true,
         headerStyle: {
           backgroundColor: theme.colors.surface,
         },
-        headerTintColor: theme.colors.textPrimary,
+        headerTintColor: theme.colors.onSurface,
         headerTitleStyle: {
-          color: theme.colors.textPrimary,
+          color: theme.colors.onSurface,
         },
         headerRight: () => <ThemeToggleButton />,
       }}
